@@ -1,0 +1,13 @@
+#root {
+  display: flex;
+}
+
+.div1 {
+  width: 40%;
+  background-color: bisque;
+}
+
+.div2 {
+  width: 60%;
+  background-color: cadetblue;
+}
