@@ -4,16 +4,21 @@ const root = document.querySelector("#root");
 
 const firstDiv = document.createElement("div");
 firstDiv.classList.add("div1");
+
 const secondDiv = document.createElement("div");
 secondDiv.classList.add("div2");
+
 const header = document.createElement("h1");
+header.textContent = "Our Books";
+
 const list = document.createElement("ul");
 list.classList.add("list");
+
 const text = document.createElement("p");
 const button = document.createElement("button");
 button.classList.add("btn-add");
 button.textContent = "Add book";
-header.textContent = "Our Books";
+
 
 root.append(firstDiv, secondDiv);
 firstDiv.append(header, list, button);
@@ -62,19 +67,48 @@ function renderMarkup(book) {
 
 function editBook(event) {
   const elemId = event.currentTarget.parentNode.id;
-
   const bookItem = JSON.parse(localStorage.getItem("books"));
+
   const newList = bookItem.find((element) => element.id === elemId);
+
+
+  secondDiv.innerHTML = renderFormMarkup(newList);
+
+  const inputAll = document.querySelectorAll("input");
+  inputAll.forEach((el) => el.addEventListener("change", onInputValue)); // добавляем слушателя на input
+  function onInputValue(e) {
+    newList[e.target.name] = e.target.value; // переписываем полученый объект (полученый при нажатии на кнопку Edit)
+  }
+
+  const saveForm = document.querySelector(".form"); // ссылка на форму
+  saveForm.addEventListener("submit", onUpdateBook); // вешаем слушатель
+
 
   // Осталось дописать логику перезаписи данных. При нажатии на кнопку Edit.
   // Данные из формы нужно записать в объект из локал стореджа и обновить их в списке и показать в secondDiv обновленные данные.
 
-  secondDiv.innerHTML = renderFormMarkup(newList);
+  // ===========================================
+  function onUpdateBook(e) {
+    e.preventDefault();
 
-  const saveForm = document.querySelector(".form");
-  saveForm.addEventListener("submit", onUpdateBook);
+    if (
+      newList.title === "" ||
+      newList.img === "" ||
+      newList.author === "" ||
+      newList.plot === ""
+    ) {
+      alert("Все поля должны быть заполнены!");
+      return;
+    }
 
-  function onUpdateBook() {}
+    localStorage.setItem("books", JSON.stringify(bookItem)); // добавляем в локал сторедж обновленный массив
+    renderList(); // обновляем список книг
+
+    renderItem.innerHTML = renderMarkup(newList); // показываем привью с изменениями
+    setTimeout(() => alert("Книга добавлена!"), 300);  // показываем сообщене
+
+  }
+  // =======================================================
 }
 
 function renderFormMarkup(book) {
@@ -104,9 +138,8 @@ function addBook() {
     plot: "",
   };
 
-  renderFormMarkup(newBook);
 
-  secondDiv.innerHTML = newForm;
+  secondDiv.innerHTML = renderFormMarkup(newBook);
 
   const inputAll = document.querySelectorAll("input");
   inputAll.forEach((el) => el.addEventListener("change", onInputValue));
@@ -127,9 +160,7 @@ function addBook() {
     }
 
     const booksStorage = JSON.parse(localStorage.getItem("books"));
-
     booksStorage.push(newBook);
-
     localStorage.setItem("books", JSON.stringify(booksStorage));
     renderList();
 
