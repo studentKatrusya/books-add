@@ -4,20 +4,16 @@ const root = document.querySelector("#root");
 
 const firstDiv = document.createElement("div");
 firstDiv.classList.add("div1");
-
 const secondDiv = document.createElement("div");
 secondDiv.classList.add("div2");
-
 const header = document.createElement("h1");
-header.textContent = "Our Books";
-
 const list = document.createElement("ul");
 list.classList.add("list");
-
 const text = document.createElement("p");
 const button = document.createElement("button");
-button.classList.add("btn-add", "btn");
+button.classList.add("btn-add");
 button.textContent = "Add book";
+header.textContent = "Our Books";
 
 root.append(firstDiv, secondDiv);
 firstDiv.append(header, list, button);
@@ -33,19 +29,16 @@ function renderList() {
   listElem.innerHTML = bookItem
     .map(
       (elem) => `<li id ="${elem.id}">
-            <img src="${elem.img}">
-            <p class = "description">${elem.title}</p>
-            <button class="btn-edit btn">Edit</button>
-            <button class="btn-delete btn">Delete</button>
+          <p class = "description">${elem.title}</p>
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
         </li>`
     )
     .join("");
-  // <div class='wrapper'>
-  // </div>
 
   const discription = document.querySelectorAll("p");
-  const btnEdit = document.querySelectorAll(".btn-edit");
-  const btnDel = document.querySelectorAll(".btn-delete");
+  const btnEdit = document.querySelectorAll(".edit");
+  const btnDel = document.querySelectorAll(".delete");
 
   discription.forEach((elem) => elem.addEventListener("click", renderPrev));
   btnEdit.forEach((elem) => elem.addEventListener("click", editBook));
@@ -53,7 +46,6 @@ function renderList() {
 }
 
 function renderPrev(event) {
-  secondDiv.classList.add("grig-preview");
   const textDesc = event.currentTarget.textContent;
   const bookItem = JSON.parse(localStorage.getItem("books"));
 
@@ -63,53 +55,26 @@ function renderPrev(event) {
 
 function renderMarkup(book) {
   return `<h2>${book.title}</h2>
-    <h3>${book.author}</h3>
-    <p>${book.plot}</p>
-    <img class = "book-image" src = ${book.img}>`;
+  <h3>${book.author}</h3>
+   <img class = "book-image" src = ${book.img}>
+  <p>${book.plot}</p>`;
 }
 
 function editBook(event) {
-  secondDiv.classList.remove("grig-preview");
   const elemId = event.currentTarget.parentNode.id;
+
   const bookItem = JSON.parse(localStorage.getItem("books"));
-
   const newList = bookItem.find((element) => element.id === elemId);
-
-  secondDiv.innerHTML = renderFormMarkup(newList);
-
-  const inputAll = document.querySelectorAll("input");
-  inputAll.forEach((el) => el.addEventListener("change", onInputValue)); // добавляем слушателя на input
-  function onInputValue(e) {
-    newList[e.target.name] = e.target.value; // переписываем полученый объект (полученый при нажатии на кнопку Edit)
-  }
-
-  const saveForm = document.querySelector(".form"); // ссылка на форму
-  saveForm.addEventListener("submit", onUpdateBook); // вешаем слушатель
 
   // Осталось дописать логику перезаписи данных. При нажатии на кнопку Edit.
   // Данные из формы нужно записать в объект из локал стореджа и обновить их в списке и показать в secondDiv обновленные данные.
 
-  // =========================================== Дописал функционал
-  function onUpdateBook(e) {
-    e.preventDefault();
-    secondDiv.classList.add("grig-preview");
-    if (
-      newList.title === "" ||
-      newList.img === "" ||
-      newList.author === "" ||
-      newList.plot === ""
-    ) {
-      alert("Все поля должны быть заполнены!");
-      return;
-    }
+  secondDiv.innerHTML = renderFormMarkup(newList);
 
-    localStorage.setItem("books", JSON.stringify(bookItem)); // добавляем в локал сторедж обновленный массив
-    renderList(); // обновляем список книг
+  const saveForm = document.querySelector(".form");
+  saveForm.addEventListener("submit", onUpdateBook);
 
-    renderItem.innerHTML = renderMarkup(newList); // показываем привью с изменениями
-    setTimeout(() => alert("Книга добавлена!"), 300); // показываем сообщене
-  }
-  // =======================================================
+  function onUpdateBook() {}
 }
 
 function renderFormMarkup(book) {
@@ -126,7 +91,7 @@ function renderFormMarkup(book) {
     <label>
       <input type='text' placeholder='Описание' name='plot' value='${book.plot}'>
     </label>
-    <button type='submit' class='btn-save btn'>Save</button>
+    <button type='submit' class='btn-save'>Save</button>
   </form>`;
 }
 
@@ -139,7 +104,9 @@ function addBook() {
     plot: "",
   };
 
-  secondDiv.innerHTML = renderFormMarkup(newBook);
+  renderFormMarkup(newBook);
+
+  secondDiv.innerHTML = newForm;
 
   const inputAll = document.querySelectorAll("input");
   inputAll.forEach((el) => el.addEventListener("change", onInputValue));
@@ -160,7 +127,9 @@ function addBook() {
     }
 
     const booksStorage = JSON.parse(localStorage.getItem("books"));
+
     booksStorage.push(newBook);
+
     localStorage.setItem("books", JSON.stringify(booksStorage));
     renderList();
 
@@ -182,6 +151,7 @@ function deletBook(event) {
 
   const bookItem = JSON.parse(localStorage.getItem("books"));
   const newList = bookItem.filter((element) => element.id !== elemId);
+  console.log("newlist", newList);
   localStorage.setItem("books", JSON.stringify(newList));
 
   list.innerHTML = "";
