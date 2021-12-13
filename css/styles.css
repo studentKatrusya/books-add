@@ -1,13 +1,122 @@
 #root {
   display: flex;
 }
-
+body {
+  margin: 0;
+  padding: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  padding: 0;
+  margin: 0;
+}
 .div1 {
-  width: 40%;
+  width: 25%;
   background-color: bisque;
+  padding: 20px;
 }
 
 .div2 {
-  width: 60%;
+  width: 75%;
   background-color: cadetblue;
+  padding: 10px;
+}
+
+.wrapper-render {
+  display: grid;
+  grid-template-columns: 300px 1fr 1fr 1fr;
+  grid-template-rows: 70px 40px 1fr;
+  grid-template-areas:
+    "header header header header"
+    "img author author author"
+    "img descrip descrip descrip";
+}
+
+.wrapper-render h2 {
+  grid-area: header;
+  justify-self: center;
+  align-self: center;
+}
+.wrapper-render img {
+  grid-area: img;
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 5px;
+}
+
+.wrapper-render h3 {
+  grid-area: author;
+  padding: 10px;
+  align-self: center;
+}
+.wrapper-render p {
+  padding: 10px;
+  grid-area: descrip;
+}
+
+.btn {
+  border: 1px solid #b4b4b4;
+  border-radius: 3px;
+  background: #e4e4eb;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #ffe4e4;
+}
+
+h1 {
+  text-align: center;
+}
+
+.list {
+  list-style: none;
+  padding: 10px;
+}
+
+.list li {
+  border: 1px solid orange;
+  border-radius: 5px;
+  padding: 5px 5px 10px;
+  background: #f3ebff;
+}
+li p {
+  padding: 0;
+  margin: 0 0 25px 0;
+  text-align: center;
+}
+.list li:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.description {
+  cursor: pointer;
+  font-size: 20px;
+}
+.description:hover {
+  color: #6e81eb;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin: 0 auto;
+}
+
+.btn-add {
+  margin: 0 auto;
+  width: 130px;
+  display: block;
+  font-size: 16px;
+}
+
+.wrapper-prev {
 }

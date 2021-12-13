@@ -16,7 +16,7 @@ list.classList.add("list");
 
 const text = document.createElement("p");
 const button = document.createElement("button");
-button.classList.add("btn-add");
+button.classList.add("btn-add", 'btn');
 button.textContent = "Add book";
 
 
@@ -35,8 +35,10 @@ function renderList() {
     .map(
       (elem) => `<li id ="${elem.id}">
           <p class = "description">${elem.title}</p>
-          <button class="edit">Edit</button>
-          <button class="delete">Delete</button>
+          <div class='wrapper'>
+            <button class="edit btn">Edit</button>
+            <button class="delete btn">Delete</button>
+          </div>
         </li>`
     )
     .join("");
@@ -59,10 +61,12 @@ function renderPrev(event) {
 }
 
 function renderMarkup(book) {
-  return `<h2>${book.title}</h2>
-  <h3>${book.author}</h3>
-   <img class = "book-image" src = ${book.img}>
-  <p>${book.plot}</p>`;
+  // <div class='wrapper-render'>
+  // </div>
+  return `    <h2>${book.title}</h2>
+    <h3>${book.author}</h3>
+    <p>${book.plot}</p>
+    <img class = "book-image" src = ${book.img}>`;
 }
 
 function editBook(event) {
@@ -182,7 +186,6 @@ function deletBook(event) {
 
   const bookItem = JSON.parse(localStorage.getItem("books"));
   const newList = bookItem.filter((element) => element.id !== elemId);
-  console.log("newlist", newList);
   localStorage.setItem("books", JSON.stringify(newList));
 
   list.innerHTML = "";
